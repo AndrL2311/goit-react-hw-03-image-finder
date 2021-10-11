@@ -4,32 +4,30 @@ import s from './Searchbar.module.css';
 
 class Searchbar extends React.Component {
   state = {
-    bolt: null,
+    imageName: '',
   };
 
-  // formSubmitHandler = data => {
-  //   if (this.state.contacts.find(contact => contact.name === data.name)) {
-  //     return alert(`${data.name} is alredy in contacts`);
-  //   } else {
-  //     data.id = uuidv4();
-  //     this.setState(prevState => {
-  //       // console.log(prevState.contacts); // будет разный на каждой итерации
-  //       // Добавляем в масив новый объект
-  //       return { contacts: [...prevState.contacts, data] };
-  //     });
-  //   }
-  // };
+  handleNameChange = event => {
+    this.setState({ imageName: event.currentTarget.value.toLowerCase() });
+  };
 
-  // deleteContact = contactId => {
-  //   this.setState(prevState => ({
-  //     contacts: prevState.contacts.filter(contact => contact.id !== contactId),
-  //   }));
-  // };
+  handleSubmit = event => {
+    event.preventDefault();
+
+    // Проп который передается форме для вызова при сабмите
+    this.props.onSubmit(this.state.imageName);
+    // Сбрасываем значение input
+    this.reset();
+  };
+
+  reset = () => {
+    this.setState({ imageName: '' });
+  };
 
   render() {
     return (
       <header className={s.Searchbar}>
-        <form className={s.SearchForm}>
+        <form className={s.SearchForm} onSubmit={this.handleSubmit}>
           <button type="submit" className={s['SearchForm-button']}>
             <span className={s['SearchForm-button-label']}>Search</span>
           </button>
@@ -37,9 +35,12 @@ class Searchbar extends React.Component {
           <input
             className={s['SearchForm-input']}
             type="text"
-            autocomplete="off"
-            autofocus
+            // autocomplete="off"
+            // autofocus
+            name="imageName"
+            value={this.state.imageName}
             placeholder="Search images and photos"
+            onChange={this.handleNameChange}
           />
         </form>
       </header>
