@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import s from './App.module.css';
 import Searchbar from './components/Searchbar/Searchbar';
+import ImageGallery from './components/ImageGallery/ImageGallery';
 
 class App extends React.Component {
   state = {
@@ -19,6 +20,7 @@ class App extends React.Component {
     return (
       <div className={s.App}>
         <Searchbar onSubmit={this.formSubmitHandler} />
+        <ImageGallery />
         <ToastContainer autoClose={3000} theme={'colored'} />
       </div>
     );
