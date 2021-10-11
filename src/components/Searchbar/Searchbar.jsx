@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 
 import s from './Searchbar.module.css';
 
@@ -13,6 +14,11 @@ class Searchbar extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    if (this.state.imageName.trim() === '') {
+      console.log('Enter image name.');
+      toast.error('Enter image name.');
+      return;
+    }
 
     // Проп который передается форме для вызова при сабмите
     this.props.onSubmit(this.state.imageName);

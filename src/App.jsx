@@ -1,4 +1,5 @@
 import React from 'react';
+import { ToastContainer } from 'react-toastify';
 // import { v4 as uuidv4 } from 'uuid';
 
 import s from './App.module.css';
@@ -17,6 +18,7 @@ class App extends React.Component {
     return (
       <div className={s.App}>
         <Searchbar onSubmit={this.formSubmitHandler} />
+        <ToastContainer />
       </div>
     );
   }
