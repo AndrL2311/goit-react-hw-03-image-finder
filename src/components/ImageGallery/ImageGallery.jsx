@@ -11,8 +11,9 @@ class ImageGallery extends React.Component {
   render() {
     const { status } = this.state;
     const { imageName } = this.props;
+    console.log(imageName);
     if (status === 'idle') {
-      return <div>Введите имя покемона.</div>;
+      return <div>Введите имя изображения.</div>;
     }
 
     // if (status === 'pending') {

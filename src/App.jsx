@@ -20,7 +20,7 @@ class App extends React.Component {
     return (
       <div className={s.App}>
         <Searchbar onSubmit={this.formSubmitHandler} />
-        <ImageGallery />
+        <ImageGallery imageName={this.state.imageName} />
         <ToastContainer autoClose={3000} theme={'colored'} />
       </div>
     );
