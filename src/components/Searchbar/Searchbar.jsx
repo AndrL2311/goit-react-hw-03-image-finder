@@ -1,12 +1,10 @@
 import React from 'react';
-// import { v4 as uuidv4 } from 'uuid';
 
-import s from './App.module.css';
-import Searchbar from './components/Searchbar/Searchbar';
+import s from './Searchbar.module.css';
 
-class App extends React.Component {
+class Searchbar extends React.Component {
   state = {
-    contacts: null,
+    bolt: null,
   };
 
   // formSubmitHandler = data => {
@@ -30,11 +28,23 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className={s.App}>
-        <Searchbar />
-      </div>
+      <header className={s.Searchbar}>
+        <form className={s.SearchForm}>
+          <button type="submit" className={s['SearchForm-button']}>
+            <span className={s['SearchForm-button-label']}>Search</span>
+          </button>
+
+          <input
+            className={s['SearchForm-input']}
+            type="text"
+            autocomplete="off"
+            autofocus
+            placeholder="Search images and photos"
+          />
+        </form>
+      </header>
     );
   }
 }
 
-export default App;
+export default Searchbar;
