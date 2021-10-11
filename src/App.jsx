@@ -1,5 +1,6 @@
 import React from 'react';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import { v4 as uuidv4 } from 'uuid';
 
 import s from './App.module.css';
@@ -18,7 +19,7 @@ class App extends React.Component {
     return (
       <div className={s.App}>
         <Searchbar onSubmit={this.formSubmitHandler} />
-        <ToastContainer />
+        <ToastContainer autoClose={3000} theme={'colored'} />
       </div>
     );
   }

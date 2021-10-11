@@ -15,7 +15,7 @@ class Searchbar extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     if (this.state.imageName.trim() === '') {
-      console.log('Enter image name.');
+      // console.log('Enter image name.');
       toast.error('Enter image name.');
       return;
     }
