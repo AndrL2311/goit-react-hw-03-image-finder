@@ -1,8 +1,9 @@
 import React from 'react';
 // import { v4 as uuidv4 } from 'uuid';
 
-// import s from './ImageGallery.module.css';
+import s from './ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+import Button from '../Button/Button';
 
 class ImageGallery extends React.Component {
   state = {
@@ -11,13 +12,13 @@ class ImageGallery extends React.Component {
     status: 'idle',
   };
   componentDidUpdate(prevProps, prevState) {
-    const prevImage = prevProps.imageName;
-    const nextImage = this.props.imageName;
+    const prevImageName = prevProps.imageName;
+    const nextImageName = this.props.imageName;
 
-    if (prevImage !== nextImage) {
+    if (prevImageName !== nextImageName) {
       console.log('Изменилось');
       fetch(
-        `https://pixabay.com/api/?key=22969928-aad90fecb00099c81964f1030&per_page=12&page=${this.state.page}&q=${nextImage}&image_type=photo`,
+        `https://pixabay.com/api/?key=22969928-aad90fecb00099c81964f1030&per_page=12&page=${this.state.page}&q=${nextImageName}&image_type=photo`,
       )
         .then(res => res.json())
         .then(res => res.hits)
@@ -27,11 +28,14 @@ class ImageGallery extends React.Component {
 
   render() {
     return (
-      <ul className="ImageGallery">
-        {this.state.images.map(image => (
-          <ImageGalleryItem key={image.id} previewURL={image.previewURL} />
-        ))}
-      </ul>
+      <>
+        <ul className={s.ImageGallery}>
+          {this.state.images.map(image => (
+            <ImageGalleryItem key={image.id} previewURL={image.previewURL} />
+          ))}
+        </ul>
+        {this.state.images.length !== 0 && <Button />}
+      </>
     );
 
     // const { status } = this.state;

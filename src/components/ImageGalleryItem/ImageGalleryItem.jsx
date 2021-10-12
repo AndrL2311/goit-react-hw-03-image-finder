@@ -1,7 +1,9 @@
+import s from './ImageGalleryItem.module.css';
+
 function ImageGalleryItem({ previewURL }) {
   return (
-    <li className="ImageGalleryItem">
-      <img src={previewURL} alt="" className="ImageGalleryItem-image" />
+    <li className={s.ImageGalleryItem}>
+      <img src={previewURL} alt="" className={s['ImageGalleryItem-image']} />
     </li>
   );
 }
