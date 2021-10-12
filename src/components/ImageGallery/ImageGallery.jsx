@@ -2,10 +2,11 @@ import React from 'react';
 // import { v4 as uuidv4 } from 'uuid';
 
 // import s from './ImageGallery.module.css';
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 
 class ImageGallery extends React.Component {
   state = {
-    images: null,
+    images: [],
     page: 2,
     status: 'idle',
   };
@@ -25,7 +26,13 @@ class ImageGallery extends React.Component {
   }
 
   render() {
-    return <ul className="ImageGallery"></ul>;
+    return (
+      <ul className="ImageGallery">
+        {this.state.images.map(image => (
+          <ImageGalleryItem key={image.id} previewURL={image.previewURL} />
+        ))}
+      </ul>
+    );
 
     // const { status } = this.state;
     // const { imageName } = this.props;
