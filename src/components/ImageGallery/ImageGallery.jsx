@@ -8,7 +8,7 @@ import Button from '../Button/Button';
 class ImageGallery extends React.Component {
   state = {
     images: [],
-    page: 2,
+    page: 1,
     status: 'idle',
     error: null,
   };
@@ -17,7 +17,8 @@ class ImageGallery extends React.Component {
     const nextImageName = this.props.imageName;
 
     if (prevImageName !== nextImageName) {
-      console.log('Изменилось');
+      this.setState({ status: 'pending' });
+
       fetch(
         `https://pixabay.com/api/?key=22969928-aad90fecb00099c81964f1030&per_page=12&page=${this.state.page}&q=${nextImageName}&image_type=photo`,
       )
@@ -30,48 +31,62 @@ class ImageGallery extends React.Component {
           return Promise.reject(new Error('Чтото пошло не так '));
         })
         .then(res => res.hits)
-        .then(images => this.setState({ images }))
-        .catch(error => this.setState({ error }));
+        .then(images => this.setState({ images, status: 'resolved' }))
+        .catch(error => this.setState({ error, status: 'rejected' }));
     }
   }
 
+  // render() {
+  //   const { error } = this.state;
+  //   return (
+  //     <>
+  //       <ul className={s.ImageGallery}>
+  //         {this.state.images.map(image => (
+  //           <ImageGalleryItem
+  //             key={image.id}
+  //             webformatURL={image.webformatURL}
+  //           />
+  //         ))}
+  //       </ul>
+  //       {error && <h1>{error.message}</h1>}
+  //       {this.state.images.length !== 0 && <Button />}
+  //     </>
+  //   );
+  // }
+
   render() {
-    const { error } = this.state;
-    return (
-      <>
-        <ul className={s.ImageGallery}>
-          {this.state.images.map(image => (
-            <ImageGalleryItem
-              key={image.id}
-              webformatURL={image.webformatURL}
-            />
-          ))}
-        </ul>
-        {error && <h1>{error.message}</h1>}
-        {this.state.images.length !== 0 && <Button />}
-      </>
-    );
-
-    // const { status } = this.state;
+    const { images, error, status } = this.state;
     // const { imageName } = this.props;
+
     // // console.log(imageName);
-    // if (status === 'idle') {
-    //   return <div>Введите имя изображения.
-    //     <p>{imageName}</p>
-    //   </div>;
-    // }
+    if (status === 'idle') {
+      return <div>Введите имя изображения</div>;
+    }
 
-    // if (status === 'pending') {
-    //   return <PokemonPendingView pokemonName={pokemonName} />;
-    // }
+    if (status === 'pending') {
+      return <div>Загружаем...</div>;
+    }
 
-    // if (status === 'rejected') {
-    //   return <PokemonErrorView message={error.message} />;
-    // }
+    if (status === 'rejected') {
+      return <h1>{error.message}</h1>;
+    }
 
-    // if (status === 'resolved') {
-    //   return <PokemonDataView pokemon={pokemon} />;
-    // }
+    if (status === 'resolved') {
+      return (
+        <>
+          <ul className={s.ImageGallery}>
+            {images.map(image => (
+              <ImageGalleryItem
+                key={image.id}
+                webformatURL={image.webformatURL}
+              />
+            ))}
+          </ul>
+          {error && <h1>{error.message}</h1>}
+          {this.state.images.length !== 0 && <Button />}
+        </>
+      );
+    }
   }
 }
 
