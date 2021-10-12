@@ -1,4 +1,6 @@
 import React from 'react';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import Loader from 'react-loader-spinner';
 // import { v4 as uuidv4 } from 'uuid';
 
 import s from './ImageGallery.module.css';
@@ -64,7 +66,15 @@ class ImageGallery extends React.Component {
     }
 
     if (status === 'pending') {
-      return <div>Загружаем...</div>;
+      return (
+        <Loader
+          type="Rings"
+          color="#00BFFF"
+          height={100}
+          width={100}
+          timeout={3000} //3 secs
+        />
+      );
     }
 
     if (status === 'rejected') {
