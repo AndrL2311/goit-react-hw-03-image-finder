@@ -6,6 +6,7 @@ import Loader from 'react-loader-spinner';
 import s from './ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Button from '../Button/Button';
+import fetchImages from '../../services/images-api';
 
 class ImageGallery extends React.Component {
   state = {
@@ -14,47 +15,48 @@ class ImageGallery extends React.Component {
     status: 'idle',
     error: null,
   };
+
   componentDidUpdate(prevProps, prevState) {
     const prevImageName = prevProps.imageName;
     const nextImageName = this.props.imageName;
 
     if (prevImageName !== nextImageName) {
+      this.setState({ status: 'pending', page: 1 });
+
+      fetchImages(nextImageName, this.state.page)
+        .then(images => this.setState({ images, status: 'resolved' }))
+        .catch(error => this.setState({ error, status: 'rejected' }));
+    }
+
+    if (prevState.page !== this.state.page) {
       this.setState({ status: 'pending' });
 
-      fetch(
-        `https://pixabay.com/api/?key=22969928-aad90fecb00099c81964f1030&per_page=12&page=${this.state.page}&q=${nextImageName}&image_type=photo`,
-      )
-        .then(res => {
-          console.log(res);
-          if (res.ok) {
-            return res.json();
-          }
-
-          return Promise.reject(new Error('Чтото пошло не так '));
+      fetchImages(nextImageName, this.state.page)
+        .then(images =>
+          this.setState(prevState => {
+            return {
+              images: [...prevState.images, ...images],
+              status: 'resolved',
+            };
+          }),
+        )
+        .then(() => {
+          return window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth',
+          });
         })
-        .then(res => res.hits)
-        .then(images => this.setState({ images, status: 'resolved' }))
         .catch(error => this.setState({ error, status: 'rejected' }));
     }
   }
 
-  // render() {
-  //   const { error } = this.state;
-  //   return (
-  //     <>
-  //       <ul className={s.ImageGallery}>
-  //         {this.state.images.map(image => (
-  //           <ImageGalleryItem
-  //             key={image.id}
-  //             webformatURL={image.webformatURL}
-  //           />
-  //         ))}
-  //       </ul>
-  //       {error && <h1>{error.message}</h1>}
-  //       {this.state.images.length !== 0 && <Button />}
-  //     </>
-  //   );
-  // }
+  onLoadMore = () => {
+    this.setState(prevState => {
+      return {
+        page: prevState.page + 1,
+      };
+    });
+  };
 
   render() {
     const { images, error, status } = this.state;
@@ -67,13 +69,18 @@ class ImageGallery extends React.Component {
 
     if (status === 'pending') {
       return (
-        <Loader
-          type="Rings"
-          color="#00BFFF"
-          height={100}
-          width={100}
-          timeout={3000} //3 secs
-        />
+        <div>
+          {
+            <Loader
+              type="Rings"
+              color="#00BFFF"
+              height={100}
+              width={100}
+              timeout={3000} //3 secs
+            />
+          }
+          Загружаем...
+        </div>
       );
     }
 
@@ -93,7 +100,9 @@ class ImageGallery extends React.Component {
             ))}
           </ul>
           {error && <h1>{error.message}</h1>}
-          {this.state.images.length !== 0 && <Button />}
+          {this.state.images.length !== 0 && (
+            <Button onLoadMore={this.onLoadMore} />
+          )}
         </>
       );
     }
