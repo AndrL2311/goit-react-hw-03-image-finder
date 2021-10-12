@@ -1,9 +1,9 @@
 import s from './ImageGalleryItem.module.css';
 
-function ImageGalleryItem({ previewURL }) {
+function ImageGalleryItem({ webformatURL }) {
   return (
     <li className={s.ImageGalleryItem}>
-      <img src={previewURL} alt="" className={s['ImageGalleryItem-image']} />
+      <img src={webformatURL} alt="" className={s['ImageGalleryItem-image']} />
     </li>
   );
 }

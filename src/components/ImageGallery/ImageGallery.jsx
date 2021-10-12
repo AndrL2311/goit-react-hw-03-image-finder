@@ -10,6 +10,7 @@ class ImageGallery extends React.Component {
     images: [],
     page: 2,
     status: 'idle',
+    error: null,
   };
   componentDidUpdate(prevProps, prevState) {
     const prevImageName = prevProps.imageName;
@@ -20,20 +21,33 @@ class ImageGallery extends React.Component {
       fetch(
         `https://pixabay.com/api/?key=22969928-aad90fecb00099c81964f1030&per_page=12&page=${this.state.page}&q=${nextImageName}&image_type=photo`,
       )
-        .then(res => res.json())
+        .then(res => {
+          console.log(res);
+          if (res.ok) {
+            return res.json();
+          }
+
+          return Promise.reject(new Error('Чтото пошло не так '));
+        })
         .then(res => res.hits)
-        .then(images => this.setState({ images }));
+        .then(images => this.setState({ images }))
+        .catch(error => this.setState({ error }));
     }
   }
 
   render() {
+    const { error } = this.state;
     return (
       <>
         <ul className={s.ImageGallery}>
           {this.state.images.map(image => (
-            <ImageGalleryItem key={image.id} previewURL={image.previewURL} />
+            <ImageGalleryItem
+              key={image.id}
+              webformatURL={image.webformatURL}
+            />
           ))}
         </ul>
+        {error && <h1>{error.message}</h1>}
         {this.state.images.length !== 0 && <Button />}
       </>
     );
