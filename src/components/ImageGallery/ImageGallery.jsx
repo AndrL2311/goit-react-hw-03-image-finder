@@ -5,16 +5,36 @@ import React from 'react';
 
 class ImageGallery extends React.Component {
   state = {
+    images: null,
+    page: 2,
     status: 'idle',
   };
+  componentDidUpdate(prevProps, prevState) {
+    const prevImage = prevProps.imageName;
+    const nextImage = this.props.imageName;
+
+    if (prevImage !== nextImage) {
+      console.log('Изменилось');
+      fetch(
+        `https://pixabay.com/api/?key=22969928-aad90fecb00099c81964f1030&per_page=12&page=${this.state.page}&q=${nextImage}&image_type=photo`,
+      )
+        .then(res => res.json())
+        .then(res => res.hits)
+        .then(images => this.setState({ images }));
+    }
+  }
 
   render() {
-    const { status } = this.state;
-    const { imageName } = this.props;
-    console.log(imageName);
-    if (status === 'idle') {
-      return <div>Введите имя изображения.</div>;
-    }
+    return <ul className="ImageGallery"></ul>;
+
+    // const { status } = this.state;
+    // const { imageName } = this.props;
+    // // console.log(imageName);
+    // if (status === 'idle') {
+    //   return <div>Введите имя изображения.
+    //     <p>{imageName}</p>
+    //   </div>;
+    // }
 
     // if (status === 'pending') {
     //   return <PokemonPendingView pokemonName={pokemonName} />;
