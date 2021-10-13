@@ -40,6 +40,7 @@ class App extends React.Component {
             <img
               src={this.state.largeImageURL}
               alt={this.state.largeImageURL}
+              className={s.modalImage}
             />
           </Modal>
         )}
