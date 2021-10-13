@@ -12,11 +12,13 @@ class App extends React.Component {
   state = {
     imageName: '',
     showModal: false,
+    largeImageURL: '',
   };
 
-  toggleModal = () => {
+  toggleModal = largeImageURL => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
+      largeImageURL: largeImageURL,
     }));
   };
 
@@ -33,7 +35,15 @@ class App extends React.Component {
           toggleModal={this.toggleModal}
         />
         <ToastContainer autoClose={3000} theme={'colored'} />
-        {this.state.showModal && <Modal />}
+        {this.state.showModal && (
+          <Modal onClose={this.toggleModal}>
+            <img
+              src={this.state.largeImageURL}
+              alt={this.state.largeImageURL}
+            />
+            <h1>Привет я Модалка!!!</h1>
+          </Modal>
+        )}
       </div>
     );
   }
