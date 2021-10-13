@@ -6,10 +6,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import s from './App.module.css';
 import Searchbar from './components/Searchbar/Searchbar';
 import ImageGallery from './components/ImageGallery/ImageGallery';
+import Modal from './components/Modal/Modal';
 
 class App extends React.Component {
   state = {
     imageName: '',
+    showModal: false,
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
   };
 
   formSubmitHandler = imageName => {
@@ -20,8 +28,12 @@ class App extends React.Component {
     return (
       <div className={s.App}>
         <Searchbar onSubmit={this.formSubmitHandler} />
-        <ImageGallery imageName={this.state.imageName} />
+        <ImageGallery
+          imageName={this.state.imageName}
+          toggleModal={this.toggleModal}
+        />
         <ToastContainer autoClose={3000} theme={'colored'} />
+        {this.state.showModal && <Modal />}
       </div>
     );
   }

@@ -1,9 +1,14 @@
 import s from './ImageGalleryItem.module.css';
 
-function ImageGalleryItem({ webformatURL }) {
+function ImageGalleryItem({ webformatURL, toggleModal }) {
   return (
     <li className={s.ImageGalleryItem}>
-      <img src={webformatURL} alt="" className={s['ImageGalleryItem-image']} />
+      <img
+        src={webformatURL}
+        alt={webformatURL}
+        className={s['ImageGalleryItem-image']}
+        onClick={toggleModal}
+      />
     </li>
   );
 }
