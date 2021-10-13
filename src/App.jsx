@@ -41,7 +41,6 @@ class App extends React.Component {
               src={this.state.largeImageURL}
               alt={this.state.largeImageURL}
             />
-            <h1>Привет я Модалка!!!</h1>
           </Modal>
         )}
       </div>

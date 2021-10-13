@@ -96,6 +96,7 @@ class ImageGallery extends React.Component {
               <ImageGalleryItem
                 key={image.id}
                 webformatURL={image.webformatURL}
+                largeImageURL={image.largeImageURL}
                 toggleModal={this.props.toggleModal}
               />
             ))}
