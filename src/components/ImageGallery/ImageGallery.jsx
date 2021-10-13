@@ -92,9 +92,9 @@ class ImageGallery extends React.Component {
       return (
         <>
           <ul className={s.ImageGallery}>
-            {images.map(image => (
+            {images.map((image, index) => (
               <ImageGalleryItem
-                key={image.id}
+                key={index}
                 webformatURL={image.webformatURL}
                 largeImageURL={image.largeImageURL}
                 toggleModal={this.props.toggleModal}

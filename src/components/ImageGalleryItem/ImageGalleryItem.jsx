@@ -7,6 +7,7 @@ function ImageGalleryItem({ webformatURL, toggleModal, largeImageURL }) {
         src={webformatURL}
         alt={webformatURL}
         onClick={() => toggleModal(largeImageURL)}
+        className={s['ImageGalleryItem-image']}
       />
     </li>
   );
