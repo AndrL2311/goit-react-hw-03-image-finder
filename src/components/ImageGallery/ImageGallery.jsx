@@ -1,12 +1,10 @@
 import React from 'react';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-import Loader from 'react-loader-spinner';
-// import { v4 as uuidv4 } from 'uuid';
 
 import s from './ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Button from '../Button/Button';
 import fetchImages from '../../services/images-api';
+import LoaderImg from '../Loader/Loader';
 
 class ImageGallery extends React.Component {
   state = {
@@ -21,7 +19,7 @@ class ImageGallery extends React.Component {
     const nextImageName = this.props.imageName;
 
     if (prevImageName !== nextImageName) {
-      this.setState({ status: 'pending', page: 1 });
+      this.setState({ status: 'pending', page: 1, images: [] });
 
       fetchImages(nextImageName, this.state.page)
         .then(images => this.setState({ images, status: 'resolved' }))
@@ -60,32 +58,17 @@ class ImageGallery extends React.Component {
 
   render() {
     const { images, error, status } = this.state;
-    // const { imageName } = this.props;
 
-    // // console.log(imageName);
     if (status === 'idle') {
-      return <div>Введите имя изображения</div>;
+      return <div className={s.text}>Enter image name.</div>;
     }
 
     if (status === 'pending') {
-      return (
-        <div>
-          {
-            <Loader
-              type="Rings"
-              color="#00BFFF"
-              height={100}
-              width={100}
-              timeout={3000} //3 secs
-            />
-          }
-          Загружаем...
-        </div>
-      );
+      return <LoaderImg />;
     }
 
     if (status === 'rejected') {
-      return <h1>{error.message}</h1>;
+      return <div className={s.text}>{error.message}</div>;
     }
 
     if (status === 'resolved') {
@@ -101,7 +84,6 @@ class ImageGallery extends React.Component {
               />
             ))}
           </ul>
-          {error && <h1>{error.message}</h1>}
           {this.state.images.length !== 0 && (
             <Button onLoadMore={this.onLoadMore} />
           )}

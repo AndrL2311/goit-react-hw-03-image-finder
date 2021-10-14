@@ -19,7 +19,7 @@ class Modal extends React.Component {
   }
 
   handleKeyDown = e => {
-    console.log(e.code);
+    // console.log(e.code);
     if (e.code === 'Escape') {
       this.props.onClose();
     }
