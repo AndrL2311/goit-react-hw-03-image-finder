@@ -12,6 +12,7 @@ class ImageGallery extends React.Component {
     page: 1,
     status: 'idle',
     error: null,
+    loadMoreBtn: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -22,7 +23,10 @@ class ImageGallery extends React.Component {
       this.setState({ status: 'pending', page: 1, images: [] });
 
       fetchImages(nextImageName, this.state.page)
-        .then(images => this.setState({ images, status: 'resolved' }))
+        .then(images => {
+          this.showBtn(images);
+          this.setState({ images, status: 'resolved' });
+        })
         .catch(error => this.setState({ error, status: 'rejected' }));
     }
 
@@ -30,14 +34,15 @@ class ImageGallery extends React.Component {
       this.setState({ status: 'pending' });
 
       fetchImages(nextImageName, this.state.page)
-        .then(images =>
+        .then(images => {
+          this.showBtn(images);
           this.setState(prevState => {
             return {
               images: [...prevState.images, ...images],
               status: 'resolved',
             };
-          }),
-        )
+          });
+        })
         .then(() => {
           return window.scrollTo({
             top: document.documentElement.scrollHeight,
@@ -48,6 +53,12 @@ class ImageGallery extends React.Component {
     }
   }
 
+  showBtn = images => {
+    images.length < 12
+      ? this.setState({ loadMoreBtn: false })
+      : this.setState({ loadMoreBtn: true });
+  };
+
   onLoadMore = () => {
     this.setState(prevState => {
       return {
@@ -57,7 +68,7 @@ class ImageGallery extends React.Component {
   };
 
   render() {
-    const { images, error, status } = this.state;
+    const { images, error, status, loadMoreBtn } = this.state;
 
     if (status === 'idle') {
       return <div className={s.text}>Enter image name.</div>;
@@ -84,9 +95,7 @@ class ImageGallery extends React.Component {
               />
             ))}
           </ul>
-          {this.state.images.length !== 0 && (
-            <Button onLoadMore={this.onLoadMore} />
-          )}
+          {loadMoreBtn && <Button onLoadMore={this.onLoadMore} />}
         </>
       );
     }
